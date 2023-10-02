@@ -1,16 +1,17 @@
-// Header.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Logo from "../../static/img/logo.png";
+import Logo from '../../static/img/logo.png';
 
 function Header() {
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <nav className="navbar navbar-expand-lg navbar-light" style={{ backgroundColor: '#e3f2fd' }}>
             <div className="container-fluid" id="navbarNav">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">Care Track</a>
+                <div className="navbar-header">
+                    <a className="navbar-brand" href="#">
+                        Care Track
+                    </a>
                 </div>
-                <ul className="navbar-nav navbar-right ">
+                <ul className="navbar-nav navbar-right">
                     <li className="nav-item">
                         <Link to="/patients" className="nav-link">
                             Home

@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import Pagination from 'react-bootstrap/Pagination';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function PatientListPage() {
     const [patients, setPatients] = useState([]);
+    const [page, setPage] = useState(1);
+    const [patientsPerPage] = useState(10);
 
     useEffect(() => {
         const authToken = localStorage.getItem('authToken');
@@ -27,6 +31,15 @@ function PatientListPage() {
             });
     }, []);
 
+    const indexOfLastPatient = page * patientsPerPage;
+    const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
+    const currentPatients = patients.slice(indexOfFirstPatient, indexOfLastPatient);
+
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(patients.length / patientsPerPage); i++) {
+        pageNumbers.push(i);
+    }
+
     return (
         <div className="container mt-4">
             <h1 className="mb-4">Patient List</h1>
@@ -38,10 +51,11 @@ function PatientListPage() {
                         <th>Sex</th>
                         <th>Birth Date</th>
                         <th>Phone</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {patients.map((patient) => (
+                    {currentPatients.map((patient) => (
                         <tr key={patient.id}>
                             <td>{patient.first_name}</td>
                             <td>{patient.last_name}</td>
@@ -49,12 +63,28 @@ function PatientListPage() {
                             <td>{patient.birth_date}</td>
                             <td>{patient.phone}</td>
                             <td>
-                                <Link to={`/patient/${patient.id}`} className="btn">View Profile</Link>
+                                <Link to={`/patient/${patient.id}`} className="btn btn-info">
+                                    View Profile
+                                </Link>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+
+            <div className="d-flex justify-content-center">
+                <Pagination>
+                    {pageNumbers.map((number) => (
+                        <Pagination.Item
+                            key={number}
+                            active={number === page}
+                            onClick={() => setPage(number)}
+                        >
+                            {number}
+                        </Pagination.Item>
+                    ))}
+                </Pagination>
+            </div>
         </div>
     );
 }
