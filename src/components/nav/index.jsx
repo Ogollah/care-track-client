@@ -6,22 +6,11 @@ import Logo from "../../static/img/logo.png";
 function Header() {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <Link to="/" className="navbar-brand">
-                {/* <img src={Logo} alt='logo' /> */}
-            </Link>
-            <button
-                className="navbar-toggler"
-                type="button"
-                data-toggle="collapse"
-                data-target="#navbarNav"
-                aria-controls="navbarNav"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-            >
-                <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarNav">
-                <ul className="navbar-nav ml-auto">
+            <div className="container-fluid" id="navbarNav">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Care Track</a>
+                </div>
+                <ul className="navbar-nav navbar-right ">
                     <li className="nav-item">
                         <Link to="/patients" className="nav-link">
                             Home
@@ -30,6 +19,11 @@ function Header() {
                     <li className="nav-item">
                         <Link to="/registration" className="nav-link">
                             Patient Registration
+                        </Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link to="/" className="nav-link">
+                            Log out
                         </Link>
                     </li>
                 </ul>
