@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 function PatientProfilePage() {
+    const navigate = useNavigate();
     const [patient, setPatient] = useState(null);
     const { id } = useParams();
 
@@ -61,7 +62,7 @@ function PatientProfilePage() {
     const handleSubmit = () => {
         // Prepare the data to send in the POST request
         const visitData = {
-            visit_date: selectedDate,
+            visitDate: selectedDate,
             weight,
             height,
             bmi,
@@ -72,7 +73,7 @@ function PatientProfilePage() {
         };
 
         // Send the POST request
-        fetch(`http://localhost:8095/api/v1/visit/${id}`, {
+        fetch(`http://localhost:8095/api/v1/visit/10`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -81,7 +82,7 @@ function PatientProfilePage() {
         })
             .then((response) => {
                 if (response.ok) {
-
+                    navigate('/patients');
                     console.log('Visit data submitted successfully');
                 } else {
                     // Handle errors, e.g., show an error message to the user
@@ -163,7 +164,7 @@ function PatientProfilePage() {
                                 <option value="Good">Good</option>
                                 <option value="Poor">Poor</option>
                             </select>
-                            <label htmlFor="onDiet">Are you on diet:</label>
+                            <label htmlFor="onDiet">Have you ever been on diet to loose weight?</label>
                             <select
                                 className="form-select"
                                 onChange={(e) => setOnDiet(e.target.value)}
@@ -196,7 +197,7 @@ function PatientProfilePage() {
                                 <option value="Good">Good</option>
                                 <option value="Poor">Poor</option>
                             </select>
-                            <label htmlFor="takingDrugs">Are you taking drugs:</label>
+                            <label htmlFor="takingDrugs">Are you currently taking any drugs</label>
                             <select
                                 className="form-select"
                                 onChange={(e) => setTakingDrugs(e.target.value)}

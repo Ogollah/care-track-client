@@ -1,38 +1,37 @@
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '../authSlice';
 import { useLoginMutation } from '../authApi';
 
 const Login = () => {
-    const userRef = useRef()
-    const errRef = useRef()
-    const [username, setUser] = useState('')
-    const [password, setPwd] = useState('')
-    const [errMsg, setErrMsg] = useState('')
-    const navigate = useNavigate()
+    const userRef = useRef();
+    const errRef = useRef();
+    const [username, setUser] = useState('');
+    const [password, setPwd] = useState('');
+    const [errMsg, setErrMsg] = useState('');
+    const navigate = useNavigate();
 
-    const [login, { isLoading }] = useLoginMutation()
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        userRef.current.focus()
-    }, [])
+    const [login, { isLoading }] = useLoginMutation();
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        setErrMsg('')
-    }, [username, password])
+        userRef.current.focus();
+    }, []);
+
+    useEffect(() => {
+        setErrMsg('');
+    }, [username, password]);
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         try {
-            const userData = await login({ username, password }).unwrap()
-            dispatch(setCredentials({ ...userData, username }))
-            setUser('')
-            setPwd('')
-            navigate('/patients')
+            const userData = await login({ username, password }).unwrap();
+            dispatch(setCredentials({ ...userData, username }));
+            setUser('');
+            setPwd('');
+            navigate('/patients');
         } catch (err) {
             if (!err?.originalStatus) {
                 // isLoading: true until timeout occurs
@@ -46,43 +45,59 @@ const Login = () => {
             }
             errRef.current.focus();
         }
-    }
+    };
 
-    const handleUserInput = (e) => setUser(e.target.value)
+    const handleUserInput = (e) => setUser(e.target.value);
 
-    const handlePwdInput = (e) => setPwd(e.target.value)
+    const handlePwdInput = (e) => setPwd(e.target.value);
 
-    const content = isLoading ? <h1>Loading...</h1> : (
-        <section className="login">
-            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+    return (
+        <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+            <section className="login">
+                <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
+                    {errMsg}
+                </p>
 
-            <h1>User Login</h1>
+                <h1 className="text-center">User Login</h1>
 
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="username">Username:</label>
-                <input
-                    type="text"
-                    id="username"
-                    ref={userRef}
-                    value={username}
-                    onChange={handleUserInput}
-                    autoComplete="off"
-                    required
-                />
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <label htmlFor="username" className="form-label">
+                            Username:
+                        </label>
+                        <input
+                            type="text"
+                            id="username"
+                            ref={userRef}
+                            value={username}
+                            onChange={handleUserInput}
+                            autoComplete="off"
+                            required
+                            className="form-control"
+                        />
+                    </div>
 
-                <label htmlFor="password">Password:</label>
-                <input
-                    type="password"
-                    id="password"
-                    onChange={handlePwdInput}
-                    value={password}
-                    required
-                />
-                <button>Sign In</button>
-            </form>
-        </section>
-    )
+                    <div className="mb-3">
+                        <label htmlFor="password" className="form-label">
+                            Password:
+                        </label>
+                        <input
+                            type="password"
+                            id="password"
+                            onChange={handlePwdInput}
+                            value={password}
+                            required
+                            className="form-control"
+                        />
+                    </div>
 
-    return content
-}
-export default Login
+                    <button type="submit" className="btn btn-primary">
+                        Sign In
+                    </button>
+                </form>
+            </section>
+        </div>
+    );
+};
+
+export default Login;
