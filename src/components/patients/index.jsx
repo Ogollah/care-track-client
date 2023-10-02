@@ -49,7 +49,7 @@ function PatientListPage() {
                             <td>{patient.birth_date}</td>
                             <td>{patient.phone}</td>
                             <td>
-                                <Link to={`/patient/${patient.id}`}>View Profile</Link>
+                                <Link to={`/patient/${patient.id}`} className="btn">View Profile</Link>
                             </td>
                         </tr>
                     ))}

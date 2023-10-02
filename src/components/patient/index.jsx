@@ -16,7 +16,6 @@ function PatientProfilePage() {
             .catch((error) => console.error('Error fetching patient data', error));
     }, [id]);
 
-    // Dummy patient data for rendering in case patient is null
     const dummyPatient = {
         firstName: 'John',
         lastName: 'Doe',
@@ -31,9 +30,6 @@ function PatientProfilePage() {
     const [taking_drugs, setTakingDrugs] = useState('');
     const [comments, setComments] = useState('');
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [showSectionA, setShowSectionA] = useState(false);
-    const [showSectionB, setShowSectionB] = useState(false);
-    const [showSectionC, setShowSectionC] = useState(false);
     const [weight, setWeight] = useState('');
     const [height, setHeight] = useState('');
 
@@ -50,12 +46,8 @@ function PatientProfilePage() {
             const heightInMeters = heightNum / 100;
             const bmiValue = (weightNum / (heightInMeters * heightInMeters)).toFixed(2);
             setBmi(bmiValue);
-            setShowSectionA(true);
-            if (bmiValue >= 25) {
-                setShowSectionC(true);
-            } else {
-                setShowSectionB(true);
-            }
+        } else {
+            setBmi('');
         }
     }, [weight, height]);
 
@@ -93,36 +85,28 @@ function PatientProfilePage() {
     };
 
     return (
-        <div>
-
-            <div className="container">
-                <div className="row">
-                    <div className="col-md-6">
-                        <h2>Patient Information</h2>
-                        {patient ? (
-                            <div>
-                                <p><strong>Name:</strong> {patient.first_name} {patient.last_name}</p>
-                                <p><strong>Birth Date:</strong> {patient.birth_date}</p>
-                                <p><strong>Sex:</strong> {dummyPatient.sex}</p>
-                                <p><strong>Phone:</strong> {patient.phone}</p>
-                            </div>
-                        ) : (
-                            <div>
-                                <p><strong>Name:</strong> {dummyPatient.firstName} {dummyPatient.lastName}</p>
-                                <p><strong>Birth Date:</strong> {dummyPatient.birthDate}</p>
-                                <p><strong>Sex:</strong> {dummyPatient.sex}</p>
-                                <p><strong>Phone:</strong> {dummyPatient.phone}</p>
-                            </div>
-                        )}
-                    </div>
+        <div className="container mt-4">
+            <h2>Patient Information</h2>
+            {patient ? (
+                <div>
+                    <p><strong>Name:</strong> {patient.first_name} {patient.last_name}</p>
+                    <p><strong>Birth Date:</strong> {patient.birth_date}</p>
+                    <p><strong>Sex:</strong> {dummyPatient.sex}</p>
+                    <p><strong>Phone:</strong> {patient.phone}</p>
                 </div>
-            </div>
+            ) : (
+                <div>
+                    <p><strong>Name:</strong> {dummyPatient.firstName} {dummyPatient.lastName}</p>
+                    <p><strong>Birth Date:</strong> {dummyPatient.birthDate}</p>
+                    <p><strong>Sex:</strong> {dummyPatient.sex}</p>
+                    <p><strong>Phone:</strong> {dummyPatient.phone}</p>
+                </div>
+            )}
             <hr />
-
             <div className="container mt-4">
                 <div className="row">
                     <div className="col-md-6">
-                        <h2>Section A: BMI</h2>
+                        <h2>Visit Form</h2>
                         <label htmlFor="weight">Date:</label>
                         <br />
                         <DatePicker
@@ -146,78 +130,84 @@ function PatientProfilePage() {
                             value={height}
                             onChange={(e) => setHeight(e.target.value)}
                         />
-                        {showSectionA && <p><strong>BMI:</strong> {bmi}</p>}
+                        {bmi && (
+                            <div>
+                                <br />
+                                <div className="form-control">
+                                    <p><strong>BMI:</strong> {bmi}</p>
+                                </div>
+                                <br />
+                                {parseFloat(bmi) < 25 ? (
+                                    <div>
+
+                                        <h3>FORM A</h3>
+                                        <label htmlFor="generalHealth">General Health:</label>
+                                        <select
+                                            className="form-select"
+                                            onChange={(e) => setGeneralHealth(e.target.value)}
+                                        >
+                                            <option value="Good">Good</option>
+                                            <option value="Poor">Poor</option>
+                                        </select>
+                                        <label htmlFor="onDiet">Have you ever been on a diet to lose weight?</label>
+                                        <select
+                                            className="form-select"
+                                            onChange={(e) => setOnDiet(e.target.value)}
+                                        >
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                        <label htmlFor="comments">Comments:</label>
+                                        <textarea
+                                            className="form-control"
+                                            placeholder="Comments"
+                                            value={comments}
+                                            onChange={(e) => setComments(e.target.value)}
+                                        />
+                                        <br />
+                                        <div>
+
+                                            <button class="btn" onClick={handleSubmit}>Submit Visit</button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <h3>FORM B Overweight</h3>
+                                        <label htmlFor="generalHealth">General Health:</label>
+                                        <select
+                                            className="form-select"
+                                            onChange={(e) => setGeneralHealth(e.target.value)}
+                                        >
+                                            <option value="Good">Good</option>
+                                            <option value="Poor">Poor</option>
+                                        </select>
+                                        <label htmlFor="takingDrugs">Are you currently taking any drugs?</label>
+                                        <select
+                                            className="form-select"
+                                            onChange={(e) => setTakingDrugs(e.target.value)}
+                                        >
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                        <label htmlFor="comments">Comments:</label>
+                                        <textarea
+                                            className="form-control"
+                                            placeholder="Comments"
+                                            value={comments}
+                                            onChange={(e) => setComments(e.target.value)}
+                                        />
+                                        <br />
+                                        <div>
+
+                                            <button className="btn btn-info" onClick={handleSubmit}>Submit Visit</button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
-
-            {showSectionB && (
-                <div className="container mt-4">
-                    <div className="row">
-                        <div className="col-md-6">
-                            <h2>Section A: Form</h2>
-                            <label htmlFor="generalHealth">General Health:</label>
-                            <select
-                                className="form-select"
-                                onChange={(e) => setGeneralHealth(e.target.value)}
-                            >
-                                <option value="Good">Good</option>
-                                <option value="Poor">Poor</option>
-                            </select>
-                            <label htmlFor="onDiet">Have you ever been on diet to loose weight?</label>
-                            <select
-                                className="form-select"
-                                onChange={(e) => setOnDiet(e.target.value)}
-                            >
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                            </select>
-                            <label htmlFor="comments">Comments:</label>
-                            <textarea
-                                className="form-control"
-                                placeholder="Comments"
-                                value={comments}
-                                onChange={(e) => setComments(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {showSectionC && (
-                <div className="container mt-4">
-                    <div className="row">
-                        <div className="col-md-6">
-                            <h2>Section B: Overweight</h2>
-                            <label htmlFor="generalHealth">General Health:</label>
-                            <select
-                                className="form-select"
-                                onChange={(e) => setGeneralHealth(e.target.value)}
-                            >
-                                <option value="Good">Good</option>
-                                <option value="Poor">Poor</option>
-                            </select>
-                            <label htmlFor="takingDrugs">Are you currently taking any drugs</label>
-                            <select
-                                className="form-select"
-                                onChange={(e) => setTakingDrugs(e.target.value)}
-                            >
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                            </select>
-                            <label htmlFor="comments">Comments:</label>
-                            <textarea
-                                className="form-control"
-                                placeholder="Comments"
-                                value={comments}
-                                onChange={(e) => setComments(e.target.value)}
-                            />
-                            <br />
-                            <button onClick={handleSubmit}>Submit Visit Data</button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
