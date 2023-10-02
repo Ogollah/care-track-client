@@ -33,9 +33,16 @@ function PatientRegistrationForm() {
         })
             .then((response) => {
                 if (response.ok) {
-                    // Redirect to the patient profile page on success
-                    navigate('/patient/profile');
+                    // Parse the response to get the newly created patient's ID
+                    return response.json();
+                } else {
+                    console.log(response.json);
+                    throw new Error('Error posting patient data');
                 }
+            })
+            .then((data) => {
+                // Redirect to the patient's profile page with the newly created ID
+                navigate(`/patient/${data.id}`);
             })
             .catch((error) => console.error('Error posting patient data', error));
     };

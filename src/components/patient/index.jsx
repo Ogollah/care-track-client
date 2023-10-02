@@ -10,7 +10,7 @@ function PatientProfilePage() {
 
     useEffect(() => {
         // Fetch patient data from the API
-        fetch(`http://localhost:8095/api/v1/patient/10`)
+        fetch(`http://localhost:8095/api/v1/patient/${id}`)
             .then((response) => response.json())
             .then((data) => setPatient(data))
             .catch((error) => console.error('Error fetching patient data', error));
@@ -73,7 +73,7 @@ function PatientProfilePage() {
         };
 
         // Send the POST request
-        fetch(`http://localhost:8095/api/v1/visit/10`, {
+        fetch(`http://localhost:8095/api/v1/visit/${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

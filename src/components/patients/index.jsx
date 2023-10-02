@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function PatientListPage() {
     const [patients, setPatients] = useState([]);
@@ -26,7 +27,6 @@ function PatientListPage() {
             });
     }, []);
 
-
     return (
         <div className="container mt-4">
             <h1 className="mb-4">Patient List</h1>
@@ -48,6 +48,9 @@ function PatientListPage() {
                             <td>{patient.sex}</td>
                             <td>{patient.birth_date}</td>
                             <td>{patient.phone}</td>
+                            <td>
+                                <Link to={`/patient/${patient.id}`}>View Profile</Link>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
